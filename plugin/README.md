@@ -1,4 +1,4 @@
-# HarmonyDB Maven Plugin
+# HarmonyDB Plugin
 
 This is a Maven plugin for HarmonyDB.
 The plugin would commnicate with a minecraft server using the Spigot API.
