@@ -4,43 +4,49 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class Database {    
-    private final String filePath; // Path to the database file
-    private Map<String, Object> metadata; // Metadata of the database
-    private final ObjectMapper objectMapper = new ObjectMapper(); // Object mapper for JSON
+public class Database {
+    private String name;
+    private String version;
+    private Map<String, Migration> migrations;
+    private Map<String, Collection> collections;
 
-    public Database(String filePath) throws IOException {
-      this.filePath = filePath;
-      load();
+    private final DatabasePersistence persistence;
+
+    public Database(DatabasePersistence persistence, String name, String version) {
+        this.name = name;
+        this.version = version;
+        this.persistence = persistence;
+        
+        load();
     }
 
-    private void load() throws IOException {
-      File file = new File(filePath);
-
-      if (!file.exists()) {
-        throw new IOException("Database file not found at: " + filePath);
-      }
-
-      metadata = objectMapper.readValue(file, Map.class);
+    public void save() throws IOException {
+        persistence.save(this);
     }
 
-    private void save() throws IOException {
-      objectMapper.writeValue(new File(filePath), metadata);
+    public void load() throws IOException {
+        persistence.load(this);
     }
 
-    public String getName() {
-      return (String) data.get("name");
+    public void applyChange(DatabaseChange change) throws MigrationValidationException {
+        if (!change.validate(this)) {
+            throw new MigrationValidationException("Invalid change: " + change);
+        }
+
+        //TODO: Apply change
     }
 
-    public String getVersion() {
-      return (String) data.get("version");
+    public void applyMigration(Migration migration) throws MigrationValidationException {
+
+        save();
     }
 
-    public List<Map<String, Migration>> getMigrations() {
-      return (List<Map<String, Migration>>) data.get("migrations");
-    }
+    public String getName() { return name; }
+    public String getVersion() { return version; }
 
-    public List<Map<String, Collection>> getCollections() {
-      return (List<Map<String, Collection>>) data.get("collections");
-    }
+    public Migration getMigration(String name) { return migrations.get(name); }
+    public Map<String, Migration> getMigrations() { return new HashMap<>(migrations); }
+
+    public Collection getCollection(String name) { return collections.get(name); }
+    public Map<String, Collection> getCollections() { return new HashMap<>(collections); }
 }

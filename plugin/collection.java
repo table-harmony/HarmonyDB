@@ -3,12 +3,22 @@ public class Collection {
     private Schema schema;
     private Location spawnLocation;
 
+    public Collection(JsonNode node) {
+        this.name = node.get("name").asText();
+        this.schema = new Schema(node.get("schema"));
+        this.spawnLocation = new Location(
+            node.get("spawn_location").get("x").asInt(), 
+            node.get("spawn_location").get("y").asInt(), 
+            node.get("spawn_location").get("z").asInt()
+        );
+    }
+
     public Collection(String name, Schema schema) {
         this.name = name;
         this.schema = schema;
         this.spawnLocation = new Location(0, 0, 0);
     }
-
+    
     public Collection(String name, Schema schema, Location spawnLocation) {
         this.name = name;
         this.schema = schema;
@@ -31,7 +41,7 @@ public class Collection {
         this.schema = newSchema;
     }
 
-    public static class Location {
+    public class Location {
         private int x;
         private int y;
         private int z;
