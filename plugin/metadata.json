@@ -1,0 +1,125 @@
+{
+  "name": "minecraft_db",
+  "version": "v1.0",
+  "collections": [
+    {
+      "name": "users",
+      "schema": {
+        "id": {
+          "type": "uuid",
+          "constraints": {
+            "primary_key": true
+          }
+        },
+        "name": {
+          "type": "string",
+          "constraints": {
+            "not_null": true
+          }
+        },
+        "email": {
+          "type": "string",
+          "constraints": {
+            "not_null": true,
+            "unique": true
+          }
+        },
+        "created_at": {
+          "type": "timestamp",
+          "constraints": {
+            "default": "CURRENT_TIMESTAMP"
+          }
+        }
+      }
+    },
+    {
+      "name": "orders",
+      "schema": {
+        "id": {
+          "type": "uuid",
+          "constraints": {
+            "primary_key": true
+          }
+        },
+        "user_id": {
+          "type": "uuid",
+          "constraints": {
+            "foreign_key": {
+              "collection": "users",
+              "column": "id"
+            }
+          }
+        },
+        "total_amount": {
+          "type": "decimal",
+          "constraints": {
+            "not_null": true,
+            "default": 0
+          }
+        },
+        "created_at": {
+          "type": "timestamp",
+          "constraints": {
+            "default": "CURRENT_TIMESTAMP"
+          }
+        }
+      }
+    }
+  ],
+  "migrations": [
+    {
+      "version": "v1.0",
+      "changes": [
+        {
+          "action": "alter",
+          "collection": "users",
+          "column_name": "phone_number",
+          "column_type": "string"
+        },
+        {
+          "action": "create",
+          "collection": "orders",
+          "schema": {
+            "id": {
+              "type": "uuid",
+              "constraints": {
+                "primary_key": true
+              }
+            },
+            "user_id": {
+              "type": "uuid",
+              "constraints": {
+                "foreign_key": {
+                  "collection": "users",
+                  "column": "id"
+                }
+              }
+            },
+            "total_amount": {
+              "type": "decimal",
+              "constraints": {
+                "not_null": true,
+                "default": 0
+              }
+            },
+            "created_at": {
+              "type": "timestamp",
+              "constraints": {
+                "default": "CURRENT_TIMESTAMP"
+              }
+            }
+          }
+        },
+        {
+          "action": "drop",
+          "collection": "users",
+          "column_name": "middle_name"
+        },
+        {
+          "action": "drop",
+          "collection": "users"
+        }
+      ]
+    }
+  ]
+}
