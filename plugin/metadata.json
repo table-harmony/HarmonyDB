@@ -4,6 +4,11 @@
   "collections": [
     {
       "name": "users",
+      "spawn_location": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
       "schema": {
         "id": {
           "type": "uuid",
@@ -34,6 +39,11 @@
     },
     {
       "name": "orders",
+      "spawn_location": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
       "schema": {
         "id": {
           "type": "uuid",
@@ -66,60 +76,5 @@
       }
     }
   ],
-  "migrations": [
-    {
-      "version": "v1.0",
-      "changes": [
-        {
-          "action": "alter",
-          "collection": "users",
-          "column_name": "phone_number",
-          "column_type": "string"
-        },
-        {
-          "action": "create",
-          "collection": "orders",
-          "schema": {
-            "id": {
-              "type": "uuid",
-              "constraints": {
-                "primary_key": true
-              }
-            },
-            "user_id": {
-              "type": "uuid",
-              "constraints": {
-                "foreign_key": {
-                  "collection": "users",
-                  "column": "id"
-                }
-              }
-            },
-            "total_amount": {
-              "type": "decimal",
-              "constraints": {
-                "not_null": true,
-                "default": 0
-              }
-            },
-            "created_at": {
-              "type": "timestamp",
-              "constraints": {
-                "default": "CURRENT_TIMESTAMP"
-              }
-            }
-          }
-        },
-        {
-          "action": "drop",
-          "collection": "users",
-          "column_name": "middle_name"
-        },
-        {
-          "action": "drop",
-          "collection": "users"
-        }
-      ]
-    }
-  ]
+  "migrations": []
 }
