@@ -1,6 +1,5 @@
 {
   "name": "minecraft_db",
-  "version": "v1.0",
   "collections": [
     {
       "name": "users",

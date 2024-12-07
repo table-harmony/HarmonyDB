@@ -20,26 +20,24 @@ public class JsonDatabasePersistence implements DatabasePersistence {
         JsonNode root = objectMapper.readTree(file);
         
         database.setName(root.get("name").asText());
-        database.setVersion(root.get("version").asText());
 
         JsonNode collectionsNode = root.get("collections");
         for (JsonNode collectionNode : collectionsNode) {
             Collection collection = new Collection(collectionNode);
-            database.getCollections().put(collection.getName(), collection);
+            database.addCollection(collection);
         }
 
         JsonNode migrationsNode = root.get("migrations");
         for (JsonNode migrationNode : migrationsNode) {
             Migration migration = new Migration(migrationNode);
-            database.getMigrations().add(migration);
+            database.addMigration(migration);
         }
     }
 
     public void save(Database database) throws IOException {
         Map<String, Object> data = new HashMap<>();
         data.put("name", database.getName());
-        data.put("version", database.getVersion());
-        data.put("collections", database.getCollections().values());
+        data.put("collections", database.getCollections());
         data.put("migrations", database.getMigrations());
 
         objectMapper.writeValue(new File(filePath), data);
